@@ -6,9 +6,11 @@ import { connectDB } from './config/db.js';
 
 
 const app = express();
-const PORT = ENV_VARS.PORT;
+app.use(express.json()); // Middleware to parse JSON bodies
 
+const PORT = ENV_VARS.PORT;
 console.log('Database URL: ', ENV_VARS.MONGO_URI);
+
 app.use('/api/v1/auth', authRoutes);
 
 
