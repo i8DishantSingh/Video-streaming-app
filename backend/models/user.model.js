@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     searchHistory: {
         type: Array,
         default: []
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now
     }
 });
 
