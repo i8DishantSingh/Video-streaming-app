@@ -60,7 +60,7 @@ export async function searchMovie(req, res) {
 }
 
 export async function searchTv(req, res) {
-  const { query } = req.param;
+  const { query } = req.params;
   try {
     const response = await fetchFromTMDB(
       `https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=false&language=en-US&page=1`,
@@ -85,5 +85,29 @@ export async function searchTv(req, res) {
   } catch (error) {
     console.log("Error in searchPerson controller: ", error.message);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+export async function getSearchHisory(req, res) {
+  try {
+    res.status(200).json({ success: true, history: req.user.searchHistory });
+  } catch (error) {
+    res.status(500).json({ succes: false, message: "Internal server error" });
+  }
+}
+
+export async function removeItemFromSearchHistory(req, res) {
+  let { id } = req.params;
+  id = parseInt(id);
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: {
+        searchHistory: { id: id },
+      },
+    });
+    res.status(200).json({ succes: true, message: "Search Item Deleted" });
+  } catch (error) {
+    res.status(500).json({ succes: false, message: "Internal server error" });
+    console.log(" Error in removeItemFromSeachHistory function");
   }
 }
